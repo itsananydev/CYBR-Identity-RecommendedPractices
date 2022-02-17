@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Endpoint MFA",
+      "Challenges":["OTP,PF,OATH,SMS,EMAIL,QR,U2F,RADIUS","UP"],
+      "DurationInMinutes":0
+      }
+}

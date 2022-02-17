@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Portal Full Admin Access MFA",
+      "Challenges":["OTP,OATH,SMS,EMAIL,QR,U2F","UP,RADIUS"],
+      "DurationInMinutes":0
+      }
+}

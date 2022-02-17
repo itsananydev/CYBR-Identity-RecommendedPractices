@@ -1,0 +1,26 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "/Core/Security/CDS/Applications/AllowSelfService": true,
+            "/Core/Security/CDS/Applications/AllowPasswordView": true,
+            "/Core/Security/CDS/Applications/EnableLandCatch": true,
+            "/Core/Security/CDS/Applications/EnableWSTrustChallenges": true
+        },
+        "Description": "Allow end users the ability to save their corporate portals passwords in Identity Cloud Vault",
+        "Path": "/Policy/CA WPM",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "CARole"
+            ],
+            "ID": "/Policy/CA WPM",
+            "EnableCompliant": true,
+            "Description": "Allow end users the ability to save their corporate portals passwords in Identity Cloud Vault",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA WPM"
+        }
+    ]
+}

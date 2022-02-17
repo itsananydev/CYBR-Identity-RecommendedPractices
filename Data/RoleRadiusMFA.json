@@ -1,0 +1,4 @@
+{
+    "Name":"CA Radius MFA",
+    "Description":"This Role contains the users allowed to authenticate by Radius, and mostly used for MFA support by Radius authentication"
+}

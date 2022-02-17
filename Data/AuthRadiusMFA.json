@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Radius MFA",
+      "Challenges":["UP","OTP,PF,OATH,SMS,EMAIL"],
+      "DurationInMinutes":0
+      }
+}

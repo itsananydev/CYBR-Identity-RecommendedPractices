@@ -1,0 +1,4 @@
+{
+    "Name":"CA Business Users",
+    "Description":"This Role contains all the Standard business users accessing apps by SSO, MFA and Endpoint MFA"
+}

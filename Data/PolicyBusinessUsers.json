@@ -1,0 +1,79 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "AuthenticationEnabled": true,
+            "/Core/Authentication/AuthenticationRules": {
+                "_Type": "RowSet",
+                "Enabled": true,
+                "_UniqueKey": "Condition",
+                "_Value": [
+                    {
+                        "Conditions": [
+                            {
+                                "Prop": "IdentityCookie",
+                                "Op": "OpExists"
+                            }
+                        ],
+                        "ProfileId": "CAAuthProfile"
+                    }
+                ]
+            },
+            "/Core/Authentication/AuthenticationRulesDefaultProfileId": "CADefaultAuthProfile",
+            "/Core/Authentication/CookieAllowPersist": false,
+            "/Core/Authentication/AuthSessionMaxConcurrent": 0,
+            "/Core/Authentication/AllowIwa": true,
+            "/Core/Authentication/IwaSetKnownEndpoint": true,
+            "/Core/Authentication/IwaSatisfiesAllMechs": true,
+            "/Core/Authentication/AllowZso": true,
+            "/Core/Authentication/ZsoSkipChallenge": true,
+            "/Core/Authentication/ZsoSetKnownEndpoint": true,
+            "/Core/Authentication/ZsoSatisfiesAllMechs": true,
+            "/Core/Authentication/NoMfaMechLogin": false,
+            "/Core/Authentication/FederatedLoginAllowsMfa": false,
+            "/Core/Authentication/FederatedLoginSatisfiesAllMechs": false,
+            "/Core/MfaRestrictions/BlockMobileMechsOnMobileLogin": false,
+            "/Core/Authentication/ContinueFailedSessions": true,
+            "/Core/Authentication/SkipMechsInFalseAdvance": true,
+            "/Core/Authentication/AllowLoginMfaCache": true,
+            "/Core/Authentication/MfaSessionOobRetryEnabled": true,
+            "/Core/Authentication/MfaSessionOobRetryWaitingTime": 30,
+            "/Core/Security/CDS/ExternalMFA/ShowU2f": true,
+            "/Core/Security/CDS/ExternalMFA/U2fUiPrompt": "FIDO2 Security Key",
+            "/Core/Security/CDS/ExternalMFA/ShowQRCodeForSelfService": true,
+            "/Core/Security/CDS/ExternalMFA/UiPrompt": "OATH OTP Client",
+            "/Core/Authentication/OathPassCodePromptInMfaSetupWizard": true,
+            "/Core/PhoneAuth/UserChangeAllow": true,
+            "/Core/Authentication/MinPhonePinLength": "4",
+            "/Core/Security/CDS/Applications/AllowSelfService": false,
+            "/Core/Security/CDS/Applications/AllowPasswordView": false,
+            "/Core/Security/CDS/Applications/EnableLandCatch": false,
+            "/Core/Security/CDS/Applications/EnableWSTrust": true,
+            "/Core/Security/CDS/Applications/EnableWSTrustChallenges": true,
+            "/Core/Authentication/RequiredFactorSetupCount": 1,
+            "/Core/Authentication/SmsMessagePromptInMfaSetupWizard": true,
+            "/Core/Authentication/ConfigureSecurityQuestions": false,
+            "/Mobile/EnrollRules/Common/AllowEnrollment": false,
+            "PasswordResetEnabled": false,
+            "/Core/PasswordReset/PasswordResetEnabled": false,
+            "/Core/PasswordReset/AccountUnlockEnabled": false,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode/AutoSetupOathOtp": true
+        },
+        "Description": "This policy is used for Standard business users accessing apps by SSO, MFA",
+        "Path": "/Policy/CA Business Users",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "CARole"
+            ],
+            "ID": "/Policy/CA Business Users",
+            "EnableCompliant": true,
+            "Description": "This policy is used for Standard business users accessing apps by SSO, MFA",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA Business Users"
+        }
+    ]
+}

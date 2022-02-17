@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA ADFS MFA",
+      "Challenges":["OTP,PF,OATH,SMS,EMAIL,QR,U2F,RADIUS"],
+      "DurationInMinutes":0
+      }
+}

@@ -1,0 +1,83 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "/Core/Authentication/AllowLoginMfaCache": false,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode": true,
+            "/Core/Authentication/ZsoSatisfiesAllMechs": false,
+            "/Core/PasswordReset/ShowAccountUnlocked": false,
+            "/Core/Security/CDS/PasswordPolicy/AgeInDays": 90,
+            "/Core/Authentication/AuthenticationRulesDefaultProfileId": "CADefaultAuthProfile",
+            "/Core/Authentication/FederatedLoginAllowsMfa": false,
+            "/Core/Security/CDS/PasswordPolicy/AllowRepeatedChar": 2,
+            "/Core/Authentication/ContinueFailedSessions": true,
+            "/Core/PasswordReset/AccountUnlockADEnabled": false,
+            "/Core/Authentication/AuthenticationRules": {
+                "_UniqueKey": "Condition",
+                "_Value": [
+                    {
+                        "Conditions": [
+                            {
+                                "Prop": "DayOfWeek",
+                                "Op": "OpIsDayOfWeek",
+                                "Val": "L,0,1,2,3,4,5,6"
+                            }
+                        ],
+                        "ProfileId": "CAAuthProfile"
+                    }
+                ],
+                "Enabled": true,
+                "_Type": "RowSet"
+            },
+            "/Core/Security/CDS/PasswordPolicy/MinLength": 12,
+            "/Mobile/EndpointAgent/showAccountLocked": false,
+            "/Core/Security/CDS/PasswordPolicy/CheckWeakPassword": false,
+            "/Core/Authentication/AllowIwa": true,
+            "/Mobile/EnrollRules/Common/AllowEnrollment": true,
+            "/Core/Authentication/IwaSetKnownEndpoint": false,
+            "/Core/PasswordReset/PasswordResetADEnabled": false,
+            "/Core/Security/CDS/Applications/AllowPasswordView": false,
+            "/Core/Security/CDS/Applications/EnableWSTrust": false,
+            "/Core/Authentication/AllowZso": true,
+            "/Core/PasswordReset/AccountUnlockEnabled": true,
+            "/Core/PasswordReset/PasswordResetEnabled": true,
+            "/Core/PasswordReset/AccountUnlockIdentityCookieOnly": false,
+            "PasswordResetEnabled": true,
+            "/Mobile/EnrollRules/Common/SendEnrollmentNotification": true,
+            "/Core/PasswordReset/PasswordResetIdentityCookieOnly": false,
+            "/Core/PasswordReset/PasswordResetRequiresMfaRestart": true,
+            "/Core/Authentication/ZsoSkipChallenge": true,
+            "/Core/PasswordReset/AccountUnlockAuthProfile": "CAUnlockProfile",
+            "/Core/Security/CDS/LockoutPolicy/Threshold": 5,
+            "/Core/PasswordReset/PasswordResetAuthProfile": "CAPassResetProfile",
+            "/Core/Security/CDS/PasswordPolicy/AllowIncludeDisplayname": false,
+            "AuthenticationEnabled": true,
+            "/Core/Authentication/CookieAllowPersist": false,
+            "/Core/Security/CDS/PasswordPolicy/AllowIncludeUsername": false,
+            "/Core/Authentication/SkipMechsInFalseAdvance": true,
+            "/Core/Authentication/AuthSessionMaxConcurrent": 0,
+            "/Core/Authentication/IwaSatisfiesAllMechs": false,
+            "/Core/MfaRestrictions/BlockMobileMechsOnMobileLogin": false,
+            "/Core/Authentication/ZsoSetKnownEndpoint": false,
+            "/Core/Authentication/FederatedLoginSatisfiesAllMechs": false,
+            "/Core/Security/CDS/Applications/AllowSelfService": false,
+            "/Core/Authentication/NoMfaMechLogin": false,
+            "/Core/Authentication/AuthenticationRulesHighAuthRequestedProfileId": "AlwaysAllowed"
+        },
+        "Description": "This policy is used to provide full access to the Tenant and requires MFA to login",
+        "Path": "/Policy/CA Portal Full Admin Access MFA",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "sysadmin"
+            ],
+            "ID": "/Policy/CA Portal Full Admin Access MFA",
+            "EnableCompliant": true,
+            "Description": "This policy is used to provide full access to the Tenant and requires MFA to login.",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA Portal Full Admin Access MFA"
+        }
+    ]
+}

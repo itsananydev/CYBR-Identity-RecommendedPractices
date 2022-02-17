@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Business Users First Login",
+      "Challenges":["SMS,EMAIL","UP"],
+      "DurationInMinutes":0
+      }
+}

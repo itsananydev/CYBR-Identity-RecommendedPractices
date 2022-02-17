@@ -1,0 +1,4 @@
+{
+    "Name":"CA ADFS MFA",
+    "Description":"This Role hosts the ADFS authentication participants, Usually used as MFA after first auth by ADFS"
+}

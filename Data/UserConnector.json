@@ -1,0 +1,16 @@
+{
+    "Name": "",
+    "InEverybodyRole": "true",
+    "SendSmsInvite": "false",
+    "InSysAdminRole": "false",
+    "Description": "Connector user used to register connector activities only!",
+    "MobileNumber": "",
+    "Password": "DFg34sdgW#^tfgF%DSw5!",
+    "ServiceUser": "false",
+    "OfficeNumber": "",
+    "SendEmailInvite": "false",
+    "DisplayName": "CA Identity Connector User",
+    "ForcePasswordChangeNext": "false",
+    "PasswordNeverExpire": "false",
+    "Mail": ""
+}
