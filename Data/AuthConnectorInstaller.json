@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Connector Installer",
+      "Challenges":["UP","OTP"],
+      "DurationInMinutes":0
+      }
+}

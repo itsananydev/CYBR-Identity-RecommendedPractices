@@ -1,0 +1,50 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "/Core/__centrify_cagent/AuthenticationEnabled": true,
+            "/Core/__centrify_cagent/Authentication/AuthenticationRules": {
+                "_Type": "RowSet",
+                "Enabled": true,
+                "_UniqueKey": "Condition",
+                "_Value": [
+                    {
+                        "Conditions": [
+                            {
+                                "Prop": "DayOfWeek",
+                                "Op": "OpIsDayOfWeek",
+                                "Val": "L,0,1,2,3,4,5,6"
+                            }
+                        ],
+                        "ProfileId": "CAAuthProfile"
+                    }
+                ]
+            },
+            "/Mobile/EnrollRules/Common/AllowEnrollment": true,
+            "/Mobile/EnrollRules/Common/SendEnrollmentNotification": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode/AutoSetupOathOtp": true,        
+            "/Core/__centrify_cagent/Authentication/AuthenticationRulesDefaultProfileId": "-1",
+            "/Core/__centrify_cagent/Authentication/NoMfaMechLogin": false,           
+            "/Core/Security/CDS/ExternalMFA/ShowQRCodeForSelfService": true,
+            "/Core/Security/CDS/ExternalMFA/UiPrompt": "OATH OTP Client",
+            "/Core/Authentication/ConfigureSecurityQuestions": false,
+            "/Core/Authentication/TransferOwnership": false  
+        },
+        "Description": "Allow end users to enroll their computers to the portal as trusted and activate MFA for OS login",
+        "Path": "/Policy/CA Endpoint MFA",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "CARole"
+            ],
+            "ID": "/Policy/CA Endpoint MFA",
+            "EnableCompliant": true,
+            "Description": "Allow end users to enroll their computers to the portal as trusted and activate MFA for OS login",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA Endpoint MFA"
+        }
+    ]
+}

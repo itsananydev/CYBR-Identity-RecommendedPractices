@@ -1,0 +1,110 @@
+[
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/adminportallogin.json"
+    },
+    {
+        "Role": "CAIdentityHelpdesk",
+        "Path": "/lib/rights/adminportallogin.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/appman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/enrollonbehalfof.json"
+    },
+    {
+        "Role": "CAIdentityHelpdesk",
+        "Path": "/lib/rights/enrollonbehalfof.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/mobman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/limitedmobman.json"
+    },
+    {
+        "Role": "CAIdentityHelpdesk",
+        "Path": "/lib/rights/limitedmobman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/fedman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/identityverification.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/mfaunlock.json"
+    },
+    {
+        "Role": "CAIdentityHelpdesk",
+        "Path": "/lib/rights/mfaunlock.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/radiusman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/roroleman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/monitor.json"
+    },
+    {
+        "Role": "CAIdentityAudit",
+        "Path": "/lib/rights/monitor.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/rouserman.json"
+    },
+    {
+        "Role": "CAConnector",
+        "Path": "/lib/rights/proxycode.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/reportman.json"
+    },
+    {
+        "Role": "CAIdentityAudit",
+        "Path": "/lib/rights/reportman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/roleman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/sharedcredentials.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "ServiceRight/pCloudShowTile"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/agentmanjoin.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/dsman.json"
+    },
+    {
+        "Role": "CAIdentityHelpdesk",
+        "Path": "/lib/rights/dsman.json"
+    },
+    {
+        "Role": "CAIdentityAdmin",
+        "Path": "/lib/rights/vaultman.json"
+    }
+]

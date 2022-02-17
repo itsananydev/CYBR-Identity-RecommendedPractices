@@ -1,0 +1,4 @@
+{
+    "Name":"CA Identity Auditor",
+    "Description":"This Role members are CyberArk Identity Auditors, and allows access to Reports and UBA(if licensed)"
+}

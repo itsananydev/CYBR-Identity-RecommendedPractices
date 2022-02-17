@@ -1,0 +1,30 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "/Mobile/EnrollRules/Common/AllowEnrollment": true,
+            "/Mobile/EnrollRules/Common/SendEnrollmentNotification": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCode/AutoSetupOathOtp": true,
+            "/Core/Security/CDS/ExternalMFA/ShowQRCodeForSelfService": true,
+            "/Core/Security/CDS/ExternalMFA/UiPrompt": "OATH OTP Client",
+            "/Core/Authentication/ConfigureSecurityQuestions": false,
+            "/Core/Authentication/TransferOwnership": false   
+             },
+        "Description": "Allow users to enroll their mobile device as Trusted",
+        "Path": "/Policy/CA Mobile Registration",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "CARole"
+            ],
+            "ID": "/Policy/CA Mobile Registration",
+            "EnableCompliant": true,
+            "Description": "Allow users to enroll their mobile device as Trusted",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA Mobile Registration"
+        }
+    ]
+}

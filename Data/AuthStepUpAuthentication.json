@@ -1,0 +1,7 @@
+{
+    "settings":{
+      "Name":"CA Step-Up Authentication",
+      "Challenges":["OTP,PF,OATH,SMS,EMAIL,QR,U2F,RADIUS"],
+      "DurationInMinutes":60
+      }
+}

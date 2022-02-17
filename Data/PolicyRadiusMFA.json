@@ -1,0 +1,59 @@
+{
+    "policy": {
+        "Version": 1,
+        "Settings": {
+            "AuthenticationEnabled": true,
+            "/Core/Authentication/AuthenticationRules": {
+                "_Type": "RowSet",
+                "Enabled": true,
+                "_UniqueKey": "Condition",
+                "_Value": [
+                    {
+                        "Conditions": [
+                            {
+                                "Prop": "IpAddress",
+                                "Op": "OpInsideIpRange",
+                                "Val": "CAIPRange"
+                            }
+                        ],
+                        "ProfileId": "CAAuthPolicy"
+                    }
+                ]
+            },
+            "/Core/Authentication/AuthenticationRulesDefaultProfileId": "CAAuthPolicy",
+            "/Core/Authentication/CookieAllowPersist": false,
+            "/Core/Authentication/AuthSessionMaxConcurrent": 0,
+            "/Core/Authentication/AllowIwa": true,
+            "/Core/Authentication/IwaSetKnownEndpoint": false,
+            "/Core/Authentication/IwaSatisfiesAllMechs": false,
+            "/Core/Authentication/AllowZso": true,
+            "/Core/Authentication/ZsoSkipChallenge": true,
+            "/Core/Authentication/ZsoSetKnownEndpoint": false,
+            "/Core/Authentication/ZsoSatisfiesAllMechs": false,
+            "/Core/Authentication/NoMfaMechLogin": false,
+            "/Core/Authentication/FederatedLoginAllowsMfa": false,
+            "/Core/Authentication/FederatedLoginSatisfiesAllMechs": false,
+            "/Core/MfaRestrictions/BlockMobileMechsOnMobileLogin": false,
+            "/Core/Authentication/ContinueFailedSessions": true,
+            "/Core/Authentication/SkipMechsInFalseAdvance": true,
+            "/Core/Authentication/AllowLoginMfaCache": false,
+            "/Core/Authentication/MfaSessionOobRetryEnabled": true,
+            "/Core/Authentication/MfaSessionOobRetryWaitingTime": 30
+        },
+        "Description": "This policy is used as MFA after first authentication by Radius",
+        "Path": "/Policy/CA Radius MFA",
+        "Newpolicy": true
+    },
+    "plinks": [
+        {
+            "Params": [
+                "CARole"
+            ],
+            "ID": "/Policy/CA Radius MFA",
+            "EnableCompliant": true,
+            "Description": "This policy is used as MFA after first authentication by Radius",
+            "LinkType": "Role",
+            "PolicySet": "/Policy/CA Radius MFA"
+        }
+    ]
+}

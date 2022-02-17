@@ -1,0 +1,10 @@
+{
+    "Grants": [
+        {
+            "PrincipalId": "EndpointMFAID",
+            "Principal": "CA Endpoint MFA",
+            "PType": "Role",
+            "Rights": "AgentAuth"
+        }
+    ]
+}

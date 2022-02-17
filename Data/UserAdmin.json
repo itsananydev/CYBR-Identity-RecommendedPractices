@@ -1,0 +1,16 @@
+{
+    "Name": "",
+    "InEverybodyRole": "true",
+    "SendSmsInvite": "true",
+    "InSysAdminRole": "true",
+    "Description": "Admin user to be used as backup access to the tenant and for tenant activities only!",
+    "MobileNumber": "",
+    "Password": "G1rvB94PEilnpmZFeYcx!",
+    "ServiceUser": "false",
+    "OfficeNumber": "",
+    "SendEmailInvite": "true",
+    "DisplayName": "CA Identity Admin User",
+    "ForcePasswordChangeNext": "false",
+    "PasswordNeverExpire": "false",
+    "Mail": ""
+}

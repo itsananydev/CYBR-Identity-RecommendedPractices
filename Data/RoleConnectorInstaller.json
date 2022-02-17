@@ -1,0 +1,4 @@
+{
+    "Name":"CA Connector Installer",
+    "Description":"This Role is used to Allow a specific Identity cloud service user to install and interact from the Connector application to the portal maintaining least amount of privilege"
+}

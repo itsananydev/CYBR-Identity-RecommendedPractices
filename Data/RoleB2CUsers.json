@@ -1,0 +1,4 @@
+{
+    "Name":"CA B2C Users",
+    "Description":"This Role Allows B2C userbase federated with CyberArk Identity or hosted by Identity as a role to authenticate by MFA"
+}

@@ -1,0 +1,4 @@
+{
+    "Name":"CA Endpoint MFA",
+    "Description":"This Role contains users allowed to enroll endpoint workstations, and to allow end users to activate MFA for OS login by CyberArk Identity"
+}
