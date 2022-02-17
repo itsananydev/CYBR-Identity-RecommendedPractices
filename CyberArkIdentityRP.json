@@ -1,0 +1,70 @@
+{
+    "ContinueOnError": "true",
+    "API": {
+        "Login": {
+            "Username": "username@domain", 
+            "Password": "mypassword",
+            "TenantURL": "https://TenetID.my.idaptive.app",
+            "TenantId": "TenetID",
+            "TenantAdminRealEmail": "email-address",
+            "TenantAdminRealPhone": "my-phone"
+        }
+    },
+    "LogFile": "CyberArkIdentityRP.log",
+    "Users": {
+        "AdminUID": "",
+        "ConnectorUID": ""
+    },
+    "AuthenticationProfiles":{
+        "AuthPortalFullAdminAccessMFAID": "",
+        "AuthConnectorInstallerID": "",
+        "AuthSelfServicePasswordResetID": "",
+        "AuthBusinessUsersID": "",
+        "AuthBusinessUsersFirstLoginID": "",
+        "AuthADFSMFAID": "",
+        "AuthRadiusMFAID": "",
+        "AuthStepUpAuthenticationID": "",
+        "AuthEndpointMFAID": "",
+        "AuthB2CUsersID": "",
+        "AuthB2CUsersFirstLoginID": ""
+    },
+
+    "Organizations":{
+        "TenantID": "",
+        "GlobalID": "",
+        "Country1ID": "",
+        "Country2ID": ""
+    },
+    "Roles": {
+        "SystemAdministratorID": "", 
+        "ConnectorInstallerID": "", 
+        "SelfServicePasswordResetID": "", 
+        "BusinessUsersID": "", 
+        "ADFSMFAID": "", 
+        "RadiusMFAID": "", 
+        "MobileRegistrationID": "", 
+        "EndpointMFAID": "", 
+        "GlobalIdentityHelpDeskID": "", 
+        "GlobalIdentityAdministratorID": "", 
+        "GlobalIdentityAuditorID": "", 
+        "B2CUsersID": "",
+        "WPMID": ""
+    },
+    "Policies": {
+        "B2CUsers": "", 
+        "BusinessUsers": "", 
+        "RadiusMFA": "", 
+        "ADFSMFA": "", 
+        "SelfServicePasswordReset": "", 
+        "EndpointMFA": "", 
+        "MobileRegistration": "", 
+        "ConnectorInstaller": "", 
+        "PortalFullAdminAccessMFA": "",
+        "WPM": ""
+    },
+    "IPRange": {
+        "ADFSMFAID": "",
+        "RadiusMFAID": ""
+    },
+    "GlobalEndpointPermissions": ""
+}
