@@ -47,11 +47,30 @@
         "GlobalIdentityHelpDeskID": "", 
         "GlobalIdentityAdministratorID": "", 
         "GlobalIdentityAuditorID": "", 
-        "B2CUsersID": ""
+        "B2CUsersID": "",
+        "WPMID": "",
+        "PAMID": "",
+        "EPMID": ""
     },
-    "Policies": {},
+    "Policies": {
+        "B2CUsers": "", 
+        "BusinessUsers": "", 
+        "RadiusMFA": "", 
+        "ADFSMFA": "", 
+        "SelfServicePasswordReset": "", 
+        "EndpointMFA": "", 
+        "MobileRegistration": "", 
+        "ConnectorInstaller": "", 
+        "PortalFullAdminAccessMFA": "",
+        "WPM": ""
+    },
     "IPRange": {
         "ADFSMFAID": "",
         "RadiusMFAID": ""
-    }
+    },
+    "Applications": {
+        "PAM" :"",
+        "EPM" :""
+    },
+    "GlobalEndpointPermissions": ""
 }
