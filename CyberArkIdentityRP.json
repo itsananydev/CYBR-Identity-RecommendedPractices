@@ -48,7 +48,8 @@
         "GlobalIdentityAdministratorID": "", 
         "GlobalIdentityAuditorID": "", 
         "B2CUsersID": "",
-        "WPMID": ""
+        "WPMID": "",
+        "PAMID": ""
     },
     "Policies": {
         "B2CUsers": "", 

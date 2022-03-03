@@ -507,7 +507,23 @@ if ($caAPIResponse.success -eq "True"){
     }
     else
     {
-        CAWriteLog "ERROR" "Failed to provision Role - B2CUsers"
+        CAWriteLog "ERROR" "Failed to provision Role - WPM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
+CAWriteLog "INFO" "Provisioning Role - PAM"
+$caBody = Get-Content (".\Data\RolePAM.json")
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully provisioned Role - PAM"
+        $global:caConfiguration.Roles.PAMID = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to provision Role - PAM"
         if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
     }
 
