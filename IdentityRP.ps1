@@ -68,8 +68,8 @@ else
 
 ############################################ Some General things... ##########################################################
 
-New-Item -Path '.\Temp'-ItemType Directory
-New-Item -Path '.\CyberArkIdentityRP.log'
+New-Item -Path '.\Temp'-ItemType Directory | Out-Null
+New-Item -Path '.\CyberArkIdentityRP.log' | Out-Null
 
 #################################################################################################################################
 
@@ -535,7 +535,7 @@ CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Successfully Created Application - PAM"
-        $global:caConfiguration.Applications.PAM = ($caAPIResponse.Result)
+        $global:caConfiguration.Applications.PAM = ($caAPIResponse.Result._RowKey)
     }
     else
     {
@@ -547,15 +547,13 @@ if ($caAPIResponse.success -eq "True"){
 CAWriteLog "INFO" "Adding app to role - PAM"
 
 ((Get-Content -path .\Data\RolePAMAppPer.json) -replace 'PAMRole', $global:caConfiguration.Roles.PAMID._RowKey) | Set-Content -Path .\Temp\RolePAMAppPer.json
-((Get-Content -path .\Temp\RolePAMAppPer.json) -replace 'PAMAPP', $global:caConfiguration.Applications.PAM._RowKey) | Set-Content -Path .\Temp\RolePAMAppPer.json
+((Get-Content -path .\Temp\RolePAMAppPer.json) -replace 'PAMAPP', $global:caConfiguration.Applications.PAM) | Set-Content -Path .\Temp\RolePAMAppPer.json
 $caBody = Get-Content (".\Temp\RolePAMAppPer.json")
-
 $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Successfully Add app to role - PAM"
-        $global:caConfiguration.Applications.PAM = ($caAPIResponse.Result)
     }
     else
     {
@@ -566,12 +564,14 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - EPM"
 $caBody = Get-Content (".\Data\RoleEPM.json")
+CAWriteLog "ILAN" $caBody
 $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Successfully provisioned Role - EPM"
         $global:caConfiguration.Roles.EPMID = ($caAPIResponse.Result)
+        CAWriteLog "ILAN" $global:caConfiguration.Roles.EPMID
     }
     else
     {
@@ -587,7 +587,7 @@ CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Successfully Created Application - EPM"
-        $global:caConfiguration.Applications.EPM = ($caAPIResponse.Result)
+        $global:caConfiguration.Applications.EPM = ($caAPIResponse.Result._RowKey)
     }
     else
     {
@@ -598,15 +598,13 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Adding app to role - EPM"
 ((Get-Content -path .\Data\RoleEPMAppPer.json) -replace 'EPMRole', $global:caConfiguration.Roles.EPMID._RowKey) | Set-Content -Path .\Temp\RoleEPMAppPer.json
-((Get-Content -path .\Temp\RoleEPMAppPer.json) -replace 'EPMAPP', $global:caConfiguration.Applications.EPM._RowKey) | Set-Content -Path .\Temp\RoleEPMAppPer.json
+((Get-Content -path .\Temp\RoleEPMAppPer.json) -replace 'EPMAPP', $global:caConfiguration.Applications.EPM) | Set-Content -Path .\Temp\RoleEPMAppPer.json
 $caBody = Get-Content (".\Temp\RoleEPMAppPer.json")
-
 $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Successfully Add app to role - EPM"
-        $global:caConfiguration.Applications.EPM = ($caAPIResponse.Result)
     }
     else
     {

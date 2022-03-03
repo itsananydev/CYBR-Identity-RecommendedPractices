@@ -1,6 +1,6 @@
 [
     {
-        "Role": "PAMRole",
-        "Application": "PAMAPP"
+        "Role": "EPMRole",
+        "Application": "EPMAPP"
     }
 ]
