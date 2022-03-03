@@ -49,7 +49,8 @@
         "GlobalIdentityAuditorID": "", 
         "B2CUsersID": "",
         "WPMID": "",
-        "PAMID": ""
+        "PAMID": "",
+        "EPMID": ""
     },
     "Policies": {
         "B2CUsers": "", 
@@ -66,6 +67,10 @@
     "IPRange": {
         "ADFSMFAID": "",
         "RadiusMFAID": ""
+    },
+    "Applications": {
+        "PAM" :"",
+        "EPM" :""
     },
     "GlobalEndpointPermissions": ""
 }

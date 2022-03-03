@@ -528,6 +528,93 @@ if ($caAPIResponse.success -eq "True"){
     }
 
 #----------------
+CAWriteLog "INFO" "Creating Application - PAM"
+$caBody = Get-Content (".\Data\RolePAMApp.json")
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully Created Application - PAM"
+        $global:caConfiguration.Applications.PAM = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to Create Application - PAM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
+CAWriteLog "INFO" "Adding app to role - PAM"
+
+((Get-Content -path .\Data\RolePAMAppPer.json) -replace 'PAMRole', $global:caConfiguration.Roles.PAMID._RowKey) | Set-Content -Path .\Temp\RolePAMAppPer.json
+((Get-Content -path .\Temp\RolePAMAppPer.json) -replace 'PAMAPP', $global:caConfiguration.Applications.PAM._RowKey) | Set-Content -Path .\Temp\RolePAMAppPer.json
+$caBody = Get-Content (".\Temp\RolePAMAppPer.json")
+
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully Add app to role - PAM"
+        $global:caConfiguration.Applications.PAM = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to Add app to role - PAM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
+CAWriteLog "INFO" "Provisioning Role - EPM"
+$caBody = Get-Content (".\Data\RoleEPM.json")
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully provisioned Role - EPM"
+        $global:caConfiguration.Roles.EPMID = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to provision Role - EPM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
+CAWriteLog "INFO" "Creating Application - EPM"
+$caBody = Get-Content (".\Data\RoleEPMApp.json")
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully Created Application - EPM"
+        $global:caConfiguration.Applications.EPM = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to Create Application - EPM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
+CAWriteLog "INFO" "Adding app to role - EPM"
+((Get-Content -path .\Data\RoleEPMAppPer.json) -replace 'EPMRole', $global:caConfiguration.Roles.EPMID._RowKey) | Set-Content -Path .\Temp\RoleEPMAppPer.json
+((Get-Content -path .\Temp\RoleEPMAppPer.json) -replace 'EPMAPP', $global:caConfiguration.Applications.EPM._RowKey) | Set-Content -Path .\Temp\RoleEPMAppPer.json
+$caBody = Get-Content (".\Temp\RoleEPMAppPer.json")
+
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+CAWriteLog "INFO" "Response recieved as:"
+CAWriteLog "INFO" "$caAPIResponse"
+if ($caAPIResponse.success -eq "True"){
+        CAWriteLog "INFO" "Successfully Add app to role - EPM"
+        $global:caConfiguration.Applications.EPM = ($caAPIResponse.Result)
+    }
+    else
+    {
+        CAWriteLog "ERROR" "Failed to Add app to role - EPM"
+        if($global:caConfiguration.ContinueOnError -eq "false")  {exit 5}
+    }
+
+#----------------
 CAWriteLog "INFO" "Provisioning Role Members - Connector Installer"
 
     $caBody = '{"Name":"'+[string]$global:caConfiguration.Roles.ConnectorInstallerID._RowKey+'","Users":{"Add": ["'+[string]$global:caConfiguration.Users.ConnectorUID+'"]}}'

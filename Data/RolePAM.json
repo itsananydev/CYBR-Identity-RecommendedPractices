@@ -1,4 +1,4 @@
 {
     "Name":"CA PAM",
-    "Description":"Allows Access to the CyberArk PAM integrated SSO access"
+    "Description":"Allows Access to the CyberArk PAM by SSO"
 }
