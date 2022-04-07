@@ -22,15 +22,23 @@ CAWriteLog "INFO" "#######################################                      
 CAWriteLog "INFO" "#######################################     Starting New Script     ################################################"
 CAWriteLog "INFO" "#######################################                             ################################################"
 
+$username=Read-Host -prompt "Please enter the username for accessing your tenant"
+$password=Read-Host -prompt "Please enter your password" -AsSecureString
+$tenantID=Read-Host -prompt "Please enter the tenant ID"
+$TenantURL="https://" + $tenantID + ".my.idaptive.app"
+CAWriteLog "INFO" "Starting authentication with username" $username "at tenant url" $TenantURL 
+
+
 $caBody = @{}
-$caBody += @{"User" = $global:caConfiguration.API.Login.Username}
+$caBody += @{"User" = $username}
 $caBody += @{"Version" = "1.0"}
-$caBody += @{"TenantId" = $global:caConfiguration.API.Login.TenantId}
+$caBody += @{"TenantId" = $tenantID}
 $caBody = $caBody | ConvertTo-Json
 
-CAWriteLog "INFO" "Started First Authentication with body `n $caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Security/StartAuthentication") -body $caBody -ContentType "application/json"
+#CAWriteLog "INFO" "Started First Authentication with body `n $caBody"
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Security/StartAuthentication") -body $caBody -ContentType "application/json"
 CAWriteLog "INFO" "Received response of $caAPIResponse"
+
 
 if($caAPIResponse.success -eq "True")
 {
@@ -38,11 +46,11 @@ if($caAPIResponse.success -eq "True")
     $caBody += @{"Action" = "Answer"}
     $caBody += @{"SessionId" = $caAPIResponse.Result.SessionId}
     $caBody += @{"MechanismId" = $caAPIResponse.Result.Challenges.Mechanisms.MechanismId}
-    $caBody += @{"Answer" = $global:caConfiguration.API.Login.Password}
-    $caBody += @{"TenantId" = $global:caConfiguration.API.Login.TenantId}
+    $caBody += @{"Answer" = $password.}
+    $caBody += @{"TenantId" = $tenantID}
     $caBody = $caBody | ConvertTo-Json
     CAWriteLog "INFO" "Started Second Authentication with body `n $caBody"
-    $caAPIResponse2 = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Security/AdvanceAuthentication") -body $caBody -ContentType "application/json" -SessionVariable caWebSession
+    $caAPIResponse2 = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Security/AdvanceAuthentication") -body $caBody -ContentType "application/json" -SessionVariable caWebSession
     CAWriteLog "INFO" "Received response of $caAPIResponse2"
  
     if($caAPIResponse2.success -eq "True")
@@ -83,7 +91,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthPortalFullAdminAcce
 $caBody = Get-Content ".\Data\AuthPortalFullAdminAccessMFA.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -100,7 +108,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthConnectorInstaller"
 $caBody = Get-Content ".\Data\AuthConnectorInstaller.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -117,7 +125,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthSelfServicePassword
 $caBody = Get-Content ".\Data\AuthSelfServicePasswordReset.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -134,7 +142,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthBusinessUsersID"
 $caBody = Get-Content ".\Data\AuthBusinessUsers.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -151,7 +159,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthBusinessUsersFirstL
 $caBody = Get-Content ".\Data\AuthBusinessUsersFirstLogin.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -168,7 +176,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthADFSMFAID"
 $caBody = Get-Content ".\Data\AuthADFSMFA.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -185,7 +193,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthRadiusMFAID"
 $caBody = Get-Content ".\Data\AuthRadiusMFA.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -202,7 +210,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthStepUpAuthenticatio
 $caBody = Get-Content ".\Data\AuthStepUpAuthentication.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -219,7 +227,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthEndpointMFAID"
 $caBody = Get-Content ".\Data\AuthEndpointMFA.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -236,7 +244,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthB2CUsersID"
 $caBody = Get-Content ".\Data\AuthB2CUsers.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -253,7 +261,7 @@ CAWriteLog "INFO" "Provisioning Authentication Profile - AuthB2CUsersFirstLoginI
 $caBody = Get-Content ".\Data\AuthB2CUsersFirstLogin.json" 
 CAWriteLog "INFO" "Creating AuthProfile with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/AuthProfile/SaveProfile") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True"){
@@ -284,7 +292,7 @@ $caBody = $caBody | ConvertTo-Json
 
 CAWriteLog "INFO" "Creating Admin User with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/CDirectoryService/CreateUser") -ContentType "application/json" -Headers $global:caAuthorizationToken -WebSession $caWebSession -body $caBody
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/CDirectoryService/CreateUser") -ContentType "application/json" -Headers $global:caAuthorizationToken -WebSession $caWebSession -body $caBody
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True")
@@ -310,7 +318,7 @@ $caBody = $caBody | ConvertTo-Json
 
 CAWriteLog "INFO" "Creating Connector User with body of:"
 CAWriteLog "INFO" "$caBody"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/CDirectoryService/CreateUser") -ContentType "application/json" -Headers $global:caAuthorizationToken -WebSession $caWebSession -body $caBody
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/CDirectoryService/CreateUser") -ContentType "application/json" -Headers $global:caAuthorizationToken -WebSession $caWebSession -body $caBody
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if($caAPIResponse.success -eq "True")
@@ -332,7 +340,7 @@ CAWriteLog "INFO" "#############################      Roles....... #############
 #----------------
 CAWriteLog "INFO" "Provisioning Role - ConnectorInstallerID"
 $caBody = Get-Content (".\Data\RoleConnectorInstaller.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -347,7 +355,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - SelfServicePasswordResetID"
 $caBody = Get-Content (".\Data\RoleSelfServicePasswordReset.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -362,7 +370,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - BusinessUsers"
 $caBody = Get-Content (".\Data\RoleBusinessUsers.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -377,7 +385,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - ADFSMFA"
 $caBody = Get-Content (".\Data\RoleADFSMFA.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -392,7 +400,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - RadiusMFA"
 $caBody = Get-Content (".\Data\RoleRadiusMFA.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -407,7 +415,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - MobileRegistration"
 $caBody = Get-Content (".\Data\RoleMobileRegistration.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -422,7 +430,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - EndpointMFA"
 $caBody = Get-Content (".\Data\RoleEndpointMFA.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -437,7 +445,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - GlobalIdentityHelpDesk"
 $caBody = Get-Content (".\Data\RoleGlobalIdentityHelpDesk.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -452,7 +460,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - GlobalIdentityAdministrator"
 $caBody = Get-Content (".\Data\RoleGlobalIdentityAdministrator.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -467,7 +475,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - GlobalIdentityAuditor"
 $caBody = Get-Content (".\Data\RoleGlobalIdentityAuditor.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -482,7 +490,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - B2CUsers"
 $caBody = Get-Content (".\Data\RoleB2CUsers.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -498,7 +506,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - WPM"
 $caBody = Get-Content (".\Data\RoleWPM.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -514,7 +522,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Provisioning Role - PAM"
 $caBody = Get-Content (".\Data\RolePAM.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -530,7 +538,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Creating Application - PAM"
 $caBody = Get-Content (".\Data\RolePAMApp.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -549,7 +557,7 @@ CAWriteLog "INFO" "Adding app to role - PAM"
 ((Get-Content -path .\Data\RolePAMAppPer.json) -replace 'PAMRole', $global:caConfiguration.Roles.PAMID._RowKey) | Set-Content -Path .\Temp\RolePAMAppPer.json
 ((Get-Content -path .\Temp\RolePAMAppPer.json) -replace 'PAMAPP', $global:caConfiguration.Applications.PAM) | Set-Content -Path .\Temp\RolePAMAppPer.json
 $caBody = Get-Content (".\Temp\RolePAMAppPer.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -565,7 +573,7 @@ if ($caAPIResponse.success -eq "True"){
 CAWriteLog "INFO" "Provisioning Role - EPM"
 $caBody = Get-Content (".\Data\RoleEPM.json")
 CAWriteLog "ILAN" $caBody
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/SaasManage/StoreRole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -582,7 +590,7 @@ if ($caAPIResponse.success -eq "True"){
 #----------------
 CAWriteLog "INFO" "Creating Application - EPM"
 $caBody = Get-Content (".\Data\RoleEPMApp.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/saasManage/ImportAppFromTemplate") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -600,7 +608,7 @@ CAWriteLog "INFO" "Adding app to role - EPM"
 ((Get-Content -path .\Data\RoleEPMAppPer.json) -replace 'EPMRole', $global:caConfiguration.Roles.EPMID._RowKey) | Set-Content -Path .\Temp\RoleEPMAppPer.json
 ((Get-Content -path .\Temp\RoleEPMAppPer.json) -replace 'EPMAPP', $global:caConfiguration.Applications.EPM) | Set-Content -Path .\Temp\RoleEPMAppPer.json
 $caBody = Get-Content (".\Temp\RoleEPMAppPer.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/saasManage/PublishApplication") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -616,7 +624,7 @@ if ($caAPIResponse.success -eq "True"){
 CAWriteLog "INFO" "Provisioning Role Members - Connector Installer"
 
     $caBody = '{"Name":"'+[string]$global:caConfiguration.Roles.ConnectorInstallerID._RowKey+'","Users":{"Add": ["'+[string]$global:caConfiguration.Users.ConnectorUID+'"]}}'
-    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/roles/updaterole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/roles/updaterole") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
     CAWriteLog "INFO" "Response recieved as:"
     CAWriteLog "INFO" "$caAPIResponse"
     if ($caAPIResponse.success -eq "True"){
@@ -637,7 +645,7 @@ CAWriteLog "INFO" "Provisioning Role Members - Connector Installer"
     ((Get-Content -path .\Temp\RolesUpdate.json) -replace 'CAConnector', $global:caConfiguration.Roles.ConnectorInstallerID._RowKey) | Set-Content -Path .\Temp\RolesUpdate.json
     $caBody = Get-Content (".\Temp\RolesUpdate.json")
 
-    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Roles/AssignSuperRights") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Roles/AssignSuperRights") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
     CAWriteLog "INFO" "Response recieved as:"
     CAWriteLog "INFO" "$caAPIResponse"
     if ($caAPIResponse.success -eq "True"){
@@ -654,7 +662,7 @@ CAWriteLog "INFO" "Provisioning Role Members - Connector Installer"
 <# CAWriteLog "INFO" "Provisioning Role Members - System Administrator"
 
     $caBody = Get-Content (".\Data\RoleMembership.json")
-    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/roles/UpdateRoleV2") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/roles/UpdateRoleV2") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
     CAWriteLog "INFO" "Response recieved as:"
     CAWriteLog "INFO" "$caAPIResponse"
     if ($caAPIResponse.success -eq "True"){
@@ -676,7 +684,7 @@ CAWriteLog "INFO" "#############################      Organizations....... #####
 
 CAWriteLog "INFO" "Provisioning Organization - Tenant"
 $caBody = Get-Content (".\Data\OrgTenant.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -691,7 +699,7 @@ if ($caAPIResponse.success -eq "True"){
 
 CAWriteLog "INFO" "Provisioning Organization - Global"
 $caBody = Get-Content (".\Data\OrgGlobal.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -706,7 +714,7 @@ if ($caAPIResponse.success -eq "True"){
 
 CAWriteLog "INFO" "Provisioning Organization - Country1"
 $caBody = Get-Content (".\Data\OrgCountry1.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -721,7 +729,7 @@ if ($caAPIResponse.success -eq "True"){
 
 CAWriteLog "INFO" "Provisioning Organization - Country2"
 $caBody = Get-Content (".\Data\OrgCountry2.json")
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Org/Create") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -739,7 +747,7 @@ if ($caAPIResponse.success -eq "True"){
 <#
 CAWriteLog "INFO" "Updating Organization - Tenant"
 $caBody = '{"Name":"'+[string]$global:caConfiguration.Roles.ConnectorInstallerID._RowKey+'","Users":{"Add": ["'+[string]$global:caConfiguration.Users.ConnectorUID+'"]}}'
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Org/UpdateAdministrators") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Org/UpdateAdministrators") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -773,7 +781,7 @@ CAWriteLog "INFO" "#############################      Policies....... ##########
 $caBody = Get-Content (".\Temp\PolicyB2CUsers.json")
 
 CAWriteLog "INFO" "Provisioning Policy - B2CUsers"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -798,7 +806,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyBusinessUsers.json")
 
 CAWriteLog "INFO" "Provisioning Policy - BusinessUsers"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -820,7 +828,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyWPM.json")
 
 CAWriteLog "INFO" "Provisioning Policy - WPM"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -840,7 +848,7 @@ if ($caAPIResponse.success -eq "True"){
 
 $caBody = Get-Content (".\Data\IPRadiusMFA.json")
 CAWriteLog "INFO" "Provisioning IP Range - Radius MFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/core/UpdatePremDetectRange") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/core/UpdatePremDetectRange") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -859,7 +867,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyRadiusMFA.json")
 
 CAWriteLog "INFO" "Provisioning Policy - RadiusMFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -876,7 +884,7 @@ if ($caAPIResponse.success -eq "True"){
 
 $caBody = Get-Content (".\Data\IPADFSMFA.json")
 CAWriteLog "INFO" "Provisioning IP Range - ADFS MFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/core/UpdatePremDetectRange") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/core/UpdatePremDetectRange") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -895,7 +903,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyADFSMFA.json")
 
 CAWriteLog "INFO" "Provisioning Policy - ADFSMFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -919,7 +927,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicySelfServicePasswordReset.json")
 
 CAWriteLog "INFO" "Provisioning Policy - SelfServicePasswordReset"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -942,7 +950,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyEndpointMFA.json")
 
 CAWriteLog "INFO" "Provisioning Policy - EndpointMFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -963,7 +971,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyMobileRegistration.json")
 
 CAWriteLog "INFO" "Provisioning Policy - MobileRegistration"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -984,7 +992,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyConnectorInstaller.json")
 
 CAWriteLog "INFO" "Provisioning Policy - ConnectorInstaller"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -1009,7 +1017,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\PolicyPortalFullAdminAccessMFA.json")
 
 CAWriteLog "INFO" "Provisioning Policy - PortalFullAdminAccessMFA"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Policy/SavePolicyBlock3") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -1034,7 +1042,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Temp\EndpointMFAGlobalPermissions.json")
 
 CAWriteLog "INFO" "Provisioning EndpointMFAGlobalPermissions"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Mobile/SetDevicePermissions") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Mobile/SetDevicePermissions") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -1055,7 +1063,7 @@ if ($caAPIResponse.success -eq "True"){
 $caBody = Get-Content (".\Data\EndpointEnrollmentCode.json")
 
 CAWriteLog "INFO" "Provisioning EndpointEnrollmentCode"
-$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/EndpointAgent/AddEnrollmentCode") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
+$caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/EndpointAgent/AddEnrollmentCode") -ContentType "application/json" -Headers $global:caAuthorizationToken -body $caBody -WebSession $caWebSession
 CAWriteLog "INFO" "Response recieved as:"
 CAWriteLog "INFO" "$caAPIResponse"
 if ($caAPIResponse.success -eq "True"){
@@ -1081,9 +1089,9 @@ $global:caConfiguration | ConvertTo-Json | Set-Content ".\CyberArkIdentityRP.jso
     $caQuery = @{}
     $caQuery += @{"User" = $global:caConfiguration.API.Login.Username}
     $caQuery += @{"Version" = "1.0"}
-    $caQuery += @{"TenantId" = $global:caConfiguration.API.Login.TenantId}
+    $caQuery += @{"TenantId" = $tenantID}
     $body = $caQuery | ConvertTo-Json
-    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($global:caConfiguration.API.Login.TenantURL+"/Security/Logout") -body $body -ContentType "application/json" -Headers $global:tokenHeader
+    $caAPIResponse = Invoke-RestMethod -Method POST -Uri ($TenantURL+"/Security/Logout") -body $body -ContentType "application/json" -Headers $global:tokenHeader
     if($caAPIResponse.success -eq "True"){
         CAWriteLog "INFO" "Logout succedded !!!"
     }else{
